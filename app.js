@@ -21,7 +21,7 @@ if (sky) {
 
 const title = document.querySelector('#birthday-title');
 if (title) {
-  const titleText = `Happy Birthday ${recipient}!`;
+  const titleText = `Happy Birthday P'Nam`;
   // Keep Thai vowels and tone marks with their base character during the animation.
   const graphemes = typeof Intl.Segmenter === 'function'
     ? [...new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(titleText)].map(part => part.segment)
