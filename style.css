@@ -140,3 +140,10 @@ body.page-leaving:after{opacity:1}
 @keyframes flame-extinguish{0%{opacity:1;transform:scale(1) rotate(0)}35%{opacity:1;transform:scale(1.2,.65) rotate(-10deg)}100%{opacity:0;transform:translateY(-9px) scale(.1) rotate(18deg)}}
 @keyframes next-reveal{from{opacity:0;transform:translateY(16px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){#blowBtn{animation-duration:2.2s!important;animation-iteration-count:1!important}#blowBtn:after{animation-duration:2.2s!important;animation-iteration-count:1!important}#blowBtn.blowing{animation-duration:1.2s!important;animation-iteration-count:1!important}.magic-orb{animation-duration:1s!important;animation-iteration-count:infinite!important}.magic-spark{animation-duration:.85s!important;animation-iteration-count:1!important}.magic-layer:before{animation-duration:.85s!important;animation-iteration-count:infinite!important}.candle.out .flame{animation-duration:.42s!important;animation-iteration-count:1!important}#toGifts.next-arrive{animation-duration:.55s!important;animation-iteration-count:1!important}}
+
+/* ขยับกล่องต่อเนื่องเฉพาะตอนชี้เมาส์ */
+.gift{touch-action:manipulation}
+.gift:not(.opened):hover{animation:gift-hover 1.15s ease-in-out infinite;filter:drop-shadow(0 13px 12px #bd81bf44)}
+.gift:not(.opened).shake{animation:shake .45s ease-in-out}
+@keyframes gift-hover{0%,100%{transform:translateY(-3px) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1.5deg)}}
+@media(prefers-reduced-motion:reduce){.gift:not(.opened):hover{animation-duration:1.15s!important;animation-iteration-count:infinite!important}}

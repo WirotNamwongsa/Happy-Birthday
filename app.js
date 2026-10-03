@@ -162,7 +162,7 @@ document.querySelectorAll('.gift').forEach(gift => gift.addEventListener('click'
       document.body.append(spark); setTimeout(() => spark.remove(), 1000);
     }
     if (opened === 3) { document.querySelector('#all-open')?.classList.remove('hidden'); document.querySelector('#toLetter')?.classList.remove('hidden'); }
-  }, 200);
+  }, 250);
 }));
 
 const envelope = document.querySelector('#envelope');
