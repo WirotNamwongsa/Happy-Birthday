@@ -1,11 +1,11 @@
 // แก้ชื่อผู้รับ ผู้ส่ง และข้อความจดหมายได้ตรงนี้
 const recipient = 'พี่น้ำ';
 const sender = 'น้องเก้า';
-const letterText = `สุขสันต์วันเกิดนะพี่น้ำ ขอให้วันนี้เป็นวันที่สดใสและเต็มไปด้วยรอยยิ้ม
+const letterText = `สุขสันต์วันเกิดนะพี่น้ำ ขอให้ปีนี้เป็นปีที่สดใสและเต็มไปด้วยรอยยิ้ม
 ขอบคุณที่เป็นพี่สาวที่น่ารักและใจดีกับน้องเก้าเสมอมา
-ขอให้ทุกเรื่องที่ตั้งใจค่อยๆ สำเร็จ และมีคนดีๆ อยู่ข้างๆ เยอะๆ
-ถ้าวันไหนเหนื่อยก็อย่าลืมพัก แล้วให้น้องเก้าคอยเป็นกำลังใจให้นะ
-ขอให้ปีนี้เป็นปีที่ดีมากๆ มีความสุขในทุกวันเลย รักพี่น้ำนะ 💖`;
+ขอให้ทุกเรื่องที่ตั้งใจค่อยๆ สำเร็จ และมีคนดีๆอยู่ข้างๆเยอะๆ
+ถ้าวันไหนเหนื่อยก็อย่าลืมพัก อย่าลืมดูเเลตรักษาสุขภาพตัวเองด้วยนะ
+ขอให้ปีนี้เป็นปีที่ดีมากๆ มีความสุขในทุกๆวันเลยนะ`;
 
 const sky = document.querySelector('#sky');
 if (sky) {
@@ -155,7 +155,7 @@ document.querySelectorAll('.gift').forEach(gift => gift.addEventListener('click'
   setTimeout(() => {
     gift.classList.remove('opening'); gift.classList.add('opened'); opened++;
     if (wish) {
-      wish.textContent = `🎁 ${gift.dataset.wish}`;
+      wish.textContent = `${gift.dataset.wish}`;
       requestAnimationFrame(() => wish.classList.add('show'));
     }
     const rect = gift.getBoundingClientRect();
@@ -183,7 +183,7 @@ if (envelope) {
     if (started) return; started = true; let index = 0; const target = document.querySelector('#typed');
     function type() {
       if (index < letterText.length) { target.textContent += letterText[index++]; document.querySelector('#paper').scrollTop = document.querySelector('#paper').scrollHeight; setTimeout(type, 32); }
-      else { document.querySelector('#signature').textContent = `รักนะ — ${sender}`; document.querySelector('#signature')?.classList.add('show'); for (let n = 0; n < 7; n++) setTimeout(heart, n * 420); }
+      else { document.querySelector('#signature').textContent = `From N'Kao`; document.querySelector('#signature')?.classList.add('show'); for (let n = 0; n < 7; n++) setTimeout(heart, n * 420); }
     }
     setTimeout(type, 500);
   }
