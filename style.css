@@ -73,8 +73,10 @@
     .float-heart{position:fixed;z-index:4;bottom:-30px;pointer-events:none;animation:heartfloat 4.5s ease-out forwards}
     @keyframes heartfloat{to{transform:translateY(-110vh) rotate(20deg);opacity:0}}
     #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:8}
-    .sparkle{position:fixed;z-index:9;pointer-events:none;font-size:16px;animation:sparkleout .75s ease-out forwards}
-    @keyframes sparkleout{to{transform:translateY(-24px) scale(.2) rotate(80deg);opacity:0}}
+.sparkle{position:fixed;z-index:9;pointer-events:none;font-size:16px;animation:sparkleout .75s ease-out forwards}
+@keyframes sparkleout{to{transform:translateY(-24px) scale(.2) rotate(80deg);opacity:0}}
+.click-heart{position:fixed;z-index:19;pointer-events:none;left:var(--click-x);top:var(--click-y);font-size:var(--heart-size);line-height:1;filter:drop-shadow(0 2px 3px #c36ca255);animation:heart-burst .95s cubic-bezier(.16,.75,.35,1) forwards;will-change:transform,opacity}
+@keyframes heart-burst{0%{opacity:0;transform:translate(-50%,-50%) scale(.15) rotate(0)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.2) rotate(-8deg)}100%{opacity:0;transform:translate(calc(-50% + var(--heart-x)),calc(-50% + var(--heart-y))) scale(.55) rotate(var(--heart-rotate))}}
     .footer-note{font-size:.88rem;opacity:.75;margin-top:20px}
     @media(max-width:520px){.scene{padding:56px 16px 50px}.cake-wrap{height:240px;transform:scale(.9);margin:0 auto 12px}.gift{height:128px}.gift-box{height:82px}.gift-lid{bottom:77px}.bow{bottom:96px}.envelope-area{height:320px}.paper.open,.envelope.open .paper{height:275px;transform:translateY(-75px)}.env-front{clip-path:polygon(0 0,50% 53%,100% 0,100% 100%,0 100%)}.seal{top:43%}}
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
@@ -108,4 +110,5 @@ body.page-leaving:after{opacity:1}
   .scene{animation:scene-enter .7s cubic-bezier(.2,.75,.25,1) both!important;animation-duration:.7s!important;animation-iteration-count:1!important}
   body.page-leaving .scene{animation:scene-leave .42s ease-in both!important;animation-duration:.42s!important;animation-iteration-count:1!important}
   body:after{transition:opacity .44s ease!important}
+  .click-heart{animation-duration:.95s!important;animation-iteration-count:1!important}
 }

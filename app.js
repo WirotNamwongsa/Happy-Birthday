@@ -112,6 +112,27 @@ function sparkle(x, y) {
 addEventListener('pointermove', e => { if (e.pointerType === 'mouse') sparkle(e.clientX, e.clientY); });
 addEventListener('pointerdown', e => sparkle(e.clientX, e.clientY));
 
+// Pop a small ring of floating hearts anywhere the page is clicked or tapped.
+document.addEventListener('pointerdown', event => {
+  const hearts = ['💗', '💖', '💕', '💓', '🩷'];
+  const count = 9;
+  for (let i = 0; i < count; i++) {
+    const heart = document.createElement('span');
+    const angle = (Math.PI * 2 * i / count) + (Math.random() - .5) * .35;
+    const distance = 38 + Math.random() * 48;
+    heart.className = 'click-heart';
+    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    heart.style.setProperty('--click-x', `${event.clientX}px`);
+    heart.style.setProperty('--click-y', `${event.clientY}px`);
+    heart.style.setProperty('--heart-x', `${Math.cos(angle) * distance}px`);
+    heart.style.setProperty('--heart-y', `${Math.sin(angle) * distance}px`);
+    heart.style.setProperty('--heart-rotate', `${Math.random() * 70 - 35}deg`);
+    heart.style.setProperty('--heart-size', `${14 + Math.random() * 12}px`);
+    document.body.append(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+});
+
 // Animate internal page links, then follow their normal destinations.
 document.addEventListener('click', event => {
   const link = event.target.closest('a[href]');
