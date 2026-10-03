@@ -215,3 +215,37 @@ body.page-leaving:after{opacity:1}
 @keyframes heading-sparkle{from{opacity:.5;transform:scale(.8)}to{opacity:1;transform:scale(1.15)}}
 @media(max-width:520px){.letter-modal{padding:48px 11px 11px;border-radius:22px}.letter-modal .paper.modal-paper{padding:28px 20px;max-height:calc(88svh - 88px)}}
 @media(prefers-reduced-motion:reduce){.letter-modal[open]{animation-duration:.28s!important;animation-iteration-count:1!important}}
+
+/* Responsive layouts: keep each scene on its own page while allowing scroll on short screens. */
+@media(max-width:760px){
+  body{overflow-x:hidden;overflow-y:auto}
+  .scene{height:auto;min-height:100svh;min-height:100dvh;overflow:visible;padding:clamp(64px,10vh,92px) clamp(14px,4vw,28px) 34px}
+  .scene-inner{width:min(100%,620px)}
+  h1{font-size:clamp(2.25rem,10vw,4.1rem)}
+  .sub{font-size:clamp(.96rem,3.8vw,1.08rem);line-height:1.7}
+  .footer-note{max-width:42rem;margin:16px auto 0;line-height:1.7}
+  .gift-row{gap:clamp(8px,3vw,20px);margin:28px auto 24px}
+  .gift{width:clamp(76px,25vw,140px)}
+  .wish{width:min(100%,660px);padding:18px clamp(18px,5vw,28px) 20px}
+  .envelope-area{width:min(100%,420px)}
+  .page-nav{flex-wrap:wrap}
+  .btn{max-width:100%;white-space:normal;line-height:1.5}
+}
+@media(max-width:380px){
+  .scene{padding-inline:12px}
+  h1{font-size:clamp(2rem,9.5vw,2.45rem)}
+  .gift-row{gap:6px}
+  .gift{width:clamp(72px,25vw,94px)}
+  .gift-box{height:76px}
+  .gift-lid{bottom:71px}
+  .bow{bottom:90px;font-size:24px}
+  .paper,.paper.open,.envelope.open .paper{padding:19px 14px}
+  #typed{font-size:.9rem;line-height:1.75}
+  .letter-modal{width:calc(100vw - 16px)}
+}
+@media(max-height:620px) and (orientation:landscape){
+  .scene{padding-top:58px;padding-bottom:22px}
+  .cake-wrap{height:205px;margin:0 auto 8px;transform:scale(.78)}
+  .gift-row{margin:12px auto}
+  .envelope-area{height:255px;margin:0 auto 8px;transform:scale(.82)}
+}

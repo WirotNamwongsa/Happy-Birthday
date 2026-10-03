@@ -152,7 +152,7 @@ if (blowButton) {
     setTimeout(() => document.querySelector('#candle')?.classList.add('out'), 160);
     setTimeout(() => {
       const note = document.querySelector('.footer-note');
-      if (note) note.textContent = 'คำอธิษฐานส่งไปถึงแล้ว✨';
+      if (note) note.textContent = 'คำอธิษฐานส่งไปถึงแล้ว';
       celebrate();
     }, 480);
     setTimeout(() => {
