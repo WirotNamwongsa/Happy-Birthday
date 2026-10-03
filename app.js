@@ -17,6 +17,19 @@ if (sky) {
     balloon.style.animationDuration = `${15 + Math.random() * 17}s`;
     balloon.style.animationDelay = `-${Math.random() * 28}s`; sky.append(balloon);
   }
+  const starColors = ['#ffffff', '#ffe08a', '#f5b8dc', '#d0b8f6', '#a8dfec'];
+  const starShapes = ['✦', '✧', '·', '♡'];
+  for (let i = 0; i < 28; i++) {
+    const star = document.createElement('i');
+    star.className = 'bg-star'; star.textContent = starShapes[i % starShapes.length];
+    star.style.setProperty('--star-x', `${Math.random() * 100}%`);
+    star.style.setProperty('--star-y', `${Math.random() * 100}%`);
+    star.style.setProperty('--star-color', starColors[i % starColors.length]);
+    star.style.setProperty('--star-size', `${11 + Math.random() * 12}px`);
+    star.style.setProperty('--star-duration', `${3 + Math.random() * 5}s`);
+    star.style.setProperty('--star-delay', `${-Math.random() * 8}s`);
+    sky.append(star);
+  }
 }
 
 const title = document.querySelector('#birthday-title');
@@ -217,7 +230,7 @@ if (envelope) {
         for (let n = 0; n < 7; n++) setTimeout(heart, n * 420);
         setTimeout(() => {
           letterReady = true; paper.classList.add('ready-to-expand');
-          if (hint) hint.textContent = 'อ่านจดหมายครบแล้ว แตะที่กระดาษเพื่อขยายอ่าน 💌';
+          if (hint) hint.textContent = 'อ่านจดหมายครบแล้ว แตะที่กระดาษเพื่อขยายอ่าน';
         }, 720);
       }
     }
