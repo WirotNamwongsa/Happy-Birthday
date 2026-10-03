@@ -111,3 +111,15 @@ function sparkle(x, y) {
 }
 addEventListener('pointermove', e => { if (e.pointerType === 'mouse') sparkle(e.clientX, e.clientY); });
 addEventListener('pointerdown', e => sparkle(e.clientX, e.clientY));
+
+// Animate internal page links, then follow their normal destinations.
+document.addEventListener('click', event => {
+  const link = event.target.closest('a[href]');
+  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target) return;
+  const destination = new URL(link.href, location.href);
+  if (!destination.pathname.endsWith('.html') || destination.href === location.href) return;
+  if (destination.protocol !== 'file:' && destination.origin !== location.origin) return;
+  event.preventDefault();
+  document.body.classList.add('page-leaving');
+  setTimeout(() => { location.assign(destination.href); }, 440);
+});

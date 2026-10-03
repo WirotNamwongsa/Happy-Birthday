@@ -94,3 +94,18 @@
 .candle{z-index:3;bottom:143px;height:57px;width:14px;left:calc(50% - 7px);border-radius:5px 5px 2px 2px;background:repeating-linear-gradient(135deg,#91d9ed 0 8px,#fff 8px 15px);box-shadow:inset -3px 0 #70c6dd}
 .flame{left:1px;top:-27px;width:12px;height:22px}
 @media(max-width:520px){.cake-bottom{height:80px}.cake-top{bottom:100px}.icing{bottom:88px}.candle{bottom:140px}}
+
+/* เปลี่ยนหน้าด้วยการเลื่อนและจางอย่างนุ่มนวล */
+.scene{animation:scene-enter .7s cubic-bezier(.2,.75,.25,1) both}
+body.page-leaving .scene{animation:scene-leave .42s ease-in both}
+body:after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opacity:0;background:linear-gradient(145deg,#fff0f5,#f4edff 52%,#eafaff);transition:opacity .44s ease}
+body.page-leaving:after{opacity:1}
+@keyframes scene-enter{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes scene-leave{to{opacity:0;transform:translateY(-12px) scale(.99);filter:blur(2px)}}
+@media(prefers-reduced-motion:reduce){.scene,body.page-leaving .scene{animation:none}}
+/* ผู้ใช้ต้องการเอฟเฟกต์เปลี่ยนหน้า ให้การตั้งค่าลดการเคลื่อนไหวไม่ตัดเอฟเฟกต์นี้ */
+@media(prefers-reduced-motion:reduce){
+  .scene{animation:scene-enter .7s cubic-bezier(.2,.75,.25,1) both!important;animation-duration:.7s!important;animation-iteration-count:1!important}
+  body.page-leaving .scene{animation:scene-leave .42s ease-in both!important;animation-duration:.42s!important;animation-iteration-count:1!important}
+  body:after{transition:opacity .44s ease!important}
+}
