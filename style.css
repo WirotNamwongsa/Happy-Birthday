@@ -34,7 +34,7 @@
     .candle.out .smoke{display:block}
     @keyframes smoke{20%{opacity:.7}to{transform:translate(10px,-28px) scale(1.7);opacity:0}}
     .actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-    .btn{border:0;border-radius:999px;padding:12px 23px;background:linear-gradient(100deg,#f28eb2,#bd91e8);color:white;font-weight:600;box-shadow:0 7px 18px #bc79b344;transition:transform .2s,box-shadow .2s}
+    .btn{display:inline-block;text-decoration:none;border:0;border-radius:999px;padding:12px 23px;background:linear-gradient(100deg,#f28eb2,#bd91e8);color:white;font-weight:600;box-shadow:0 7px 18px #bc79b344;transition:transform .2s,box-shadow .2s}
     .btn:hover{transform:translateY(-3px);box-shadow:0 10px 22px #bc79b355}.btn:active{transform:scale(.97)}
     .btn.secondary{background:#fff;color:#b76caa;border:2px solid #f3c5dd;box-shadow:none}
     .hidden{display:none!important}
