@@ -5,13 +5,15 @@
     body{margin:0;color:var(--ink);font-family:'Mali',sans-serif;background:linear-gradient(145deg,#fff0f5,#f4edff 52%,#eafaff);overflow-x:hidden}
     button{font:inherit;color:inherit;cursor:pointer}
     .sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-    .sky:before{content:'';position:absolute;inset:-18%;background:radial-gradient(ellipse at 18% 28%,#ffbddb55 0,transparent 38%),radial-gradient(ellipse at 78% 68%,#9edff155 0,transparent 40%),radial-gradient(ellipse at 70% 18%,#c4a5f044 0,transparent 34%);filter:blur(28px);animation:aurora-drift 20s ease-in-out infinite alternate}
-    .sky:after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,#fff8 0%,transparent 30%,#fff4 58%,transparent 80%);opacity:.45;animation:sky-sheen 12s ease-in-out infinite alternate}
-    .balloon{position:absolute;bottom:-130px;width:42px;height:54px;border-radius:50% 50% 46% 46%;opacity:.43;animation:rise linear infinite;filter:saturate(.9)}
+    .sky:before{content:'';position:absolute;inset:-18%;background:radial-gradient(ellipse at 18% 28%,#ff9acb88 0,transparent 38%),radial-gradient(ellipse at 78% 68%,#79d8f388 0,transparent 40%),radial-gradient(ellipse at 70% 18%,#ae83f377 0,transparent 34%);filter:blur(38px);animation:aurora-drift 13s ease-in-out infinite alternate}
+    .sky:after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,#fff9 0%,transparent 30%,#fff7 58%,transparent 80%);opacity:.6;animation:sky-sheen 9s ease-in-out infinite alternate}
+    .ambient-orb{position:absolute;z-index:0;left:var(--orb-x);top:var(--orb-y);width:var(--orb-size);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffffdd 0 3%,var(--orb-color) 35%,transparent 75%);filter:blur(1px);opacity:.62;animation:orb-float var(--orb-duration) ease-in-out var(--orb-delay) infinite alternate;will-change:transform}
+    @keyframes orb-float{from{transform:translate3d(-10px,12px,0) scale(.78)}to{transform:translate3d(14px,-18px,0) scale(1.16)}}
+    .balloon{position:absolute;bottom:-130px;width:42px;height:54px;border-radius:50% 50% 46% 46%;opacity:.62;animation:rise linear infinite;filter:saturate(1.05)}
     .balloon:before{content:'';position:absolute;left:18px;bottom:-35px;width:1px;height:37px;background:#bd9bb8}
     .balloon:after{content:'';position:absolute;left:17px;bottom:-3px;border:4px solid transparent;border-top-color:inherit}
     @keyframes rise{to{transform:translateY(-120vh) translateX(25px) rotate(9deg)}}
-    .bg-star{position:absolute;z-index:1;left:var(--star-x);top:var(--star-y);color:var(--star-color);font:var(--star-size) 'Itim',cursive;line-height:1;text-shadow:0 0 10px #fff;opacity:0;animation:star-drift var(--star-duration) ease-in-out var(--star-delay) infinite alternate;will-change:transform,opacity}
+    .bg-star{position:absolute;z-index:1;left:var(--star-x);top:var(--star-y);color:var(--star-color);font:var(--star-size) 'Itim',cursive;line-height:1;text-shadow:0 0 12px #fff,0 0 22px currentColor;opacity:0;animation:star-drift var(--star-duration) ease-in-out var(--star-delay) infinite alternate;will-change:transform,opacity}
     @keyframes aurora-drift{0%{transform:translate(-2%,1%) scale(.96)}100%{transform:translate(3%,-2%) scale(1.08)}}
     @keyframes sky-sheen{0%{opacity:.18;transform:translateX(-3%)}100%{opacity:.5;transform:translateX(3%)}}
     @keyframes star-drift{0%{opacity:.3;transform:translate3d(0,5px,0) scale(.7) rotate(-12deg)}45%{opacity:.95}100%{opacity:.42;transform:translate3d(6px,-12px,0) scale(1.12) rotate(12deg)}}
@@ -161,6 +163,8 @@ body.page-leaving:after{opacity:1}
 @media(prefers-reduced-motion:reduce){
   .sky:before{animation:aurora-drift 20s ease-in-out infinite alternate!important}
   .sky:after{animation:sky-sheen 12s ease-in-out infinite alternate!important}
+  .ambient-orb{animation-duration:12s!important;animation-iteration-count:infinite!important}
+  .balloon{animation-duration:24s!important;animation-iteration-count:infinite!important}
   .bg-star{animation-duration:var(--star-duration)!important;animation-iteration-count:infinite!important}
 }
 /* เปิดกล่องและเผยคำอวยพรเป็นจังหวะต่อเนื่อง */

@@ -10,7 +10,19 @@ const letterText = `สุขสันต์วันเกิดนะพี่
 const sky = document.querySelector('#sky');
 if (sky) {
   const colors = ['#ff9fbe', '#b7a0ef', '#8ed5e8', '#ffd48f', '#f6a8d5'];
-  for (let i = 0; i < 15; i++) {
+  const orbColors = ['#ff9acb99', '#8edcf099', '#bd9df299', '#ffd88c99'];
+  for (let i = 0; i < 9; i++) {
+    const orb = document.createElement('i');
+    orb.className = 'ambient-orb';
+    orb.style.setProperty('--orb-x', `${Math.random() * 94}%`);
+    orb.style.setProperty('--orb-y', `${Math.random() * 90}%`);
+    orb.style.setProperty('--orb-size', `${75 + Math.random() * 125}px`);
+    orb.style.setProperty('--orb-color', orbColors[i % orbColors.length]);
+    orb.style.setProperty('--orb-duration', `${9 + Math.random() * 9}s`);
+    orb.style.setProperty('--orb-delay', `${-Math.random() * 12}s`);
+    sky.append(orb);
+  }
+  for (let i = 0; i < 22; i++) {
     const balloon = document.createElement('i');
     balloon.className = 'balloon'; balloon.style.left = `${Math.random() * 100}%`;
     balloon.style.background = colors[i % colors.length]; balloon.style.borderColor = colors[i % colors.length];
@@ -19,13 +31,13 @@ if (sky) {
   }
   const starColors = ['#ffffff', '#ffe08a', '#f5b8dc', '#d0b8f6', '#a8dfec'];
   const starShapes = ['✦', '✧', '·', '♡'];
-  for (let i = 0; i < 28; i++) {
+  for (let i = 0; i < 42; i++) {
     const star = document.createElement('i');
     star.className = 'bg-star'; star.textContent = starShapes[i % starShapes.length];
     star.style.setProperty('--star-x', `${Math.random() * 100}%`);
     star.style.setProperty('--star-y', `${Math.random() * 100}%`);
     star.style.setProperty('--star-color', starColors[i % starColors.length]);
-    star.style.setProperty('--star-size', `${11 + Math.random() * 12}px`);
+    star.style.setProperty('--star-size', `${13 + Math.random() * 15}px`);
     star.style.setProperty('--star-duration', `${3 + Math.random() * 5}s`);
     star.style.setProperty('--star-delay', `${-Math.random() * 8}s`);
     sky.append(star);
