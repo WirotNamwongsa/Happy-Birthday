@@ -178,3 +178,25 @@ body.page-leaving:after{opacity:1}
 @media(max-width:520px){.envelope.open .paper{--paper-slide-distance:-75px}}
 @media(max-height:720px){.envelope.open .paper{--paper-slide-distance:-65px}}
 @media(prefers-reduced-motion:reduce){.envelope.open .paper{animation-duration:1.35s!important;animation-iteration-count:1!important}}
+.envelope.open .paper{cursor:default}
+.envelope.open .paper.ready-to-expand{cursor:zoom-in}
+.letter-modal{position:fixed;width:min(760px,calc(100vw - 28px));max-width:760px;max-height:88svh;margin:auto;padding:55px 20px 20px;border:1px solid transparent;border-radius:27px;background:linear-gradient(135deg,#fff4f9,#f4efff 55%,#f0fbff) padding-box,linear-gradient(135deg,#ffc1d8,#c8a9f0 48%,#9cdeed 78%,#ffc1d8) border-box;box-shadow:0 28px 90px #63427166,0 0 35px #efc5ed55;overflow:visible}
+.letter-modal:before{content:"";position:absolute;inset:6px;border:1px solid #ffffffb8;border-radius:21px;pointer-events:none}
+.letter-modal::backdrop{background:#4c35657a;backdrop-filter:blur(5px)}
+.letter-modal[open]{animation:modal-appear .28s cubic-bezier(.2,.8,.25,1) both}
+.modal-heading{position:absolute;top:13px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;white-space:nowrap;color:#a875b2;font:1.05rem 'Itim',cursive;letter-spacing:.04em}
+.modal-heading span:first-child,.modal-heading span:last-child{color:#d88fb6;font-size:1.15rem;animation:heading-sparkle 1.6s ease-in-out infinite alternate}
+.modal-heading span:last-child{animation-delay:.8s}
+.letter-modal .paper.modal-paper{position:relative;left:auto;bottom:auto;z-index:auto;width:100%;height:auto;min-height:250px;max-height:calc(88svh - 100px);padding:clamp(26px,5vw,48px);overflow-y:auto;border:1px solid #f2dce9;border-radius:18px;background:linear-gradient(145deg,#fffefc,#fffaf6);box-shadow:0 12px 28px #96699a20,inset 0 0 0 5px #fff9;transform:none!important;animation:none!important;transition:none;text-align:left;cursor:auto}
+.letter-modal .paper.modal-paper:before,.letter-modal .paper.modal-paper:after{position:absolute;pointer-events:none;color:#e5a4c3;font:1.3rem 'Itim',cursive;opacity:.7}
+.letter-modal .paper.modal-paper:before{content:"♡";top:12px;right:17px}
+.letter-modal .paper.modal-paper:after{content:"✧";bottom:10px;left:16px;color:#b69adf}
+.letter-modal .paper-label{font-size:clamp(1.3rem,4vw,1.75rem);margin-bottom:22px;color:#cb78a4}
+.letter-modal .typed-copy{font-size:clamp(1.02rem,3vw,1.18rem);line-height:2.05;min-height:0;color:#68516f}
+.letter-modal .signature{font-size:1.55rem;margin:22px 4px 0;color:#bf6d9f}
+.modal-close{position:absolute;z-index:1;top:11px;right:13px;width:35px;height:35px;display:grid;place-items:center;border:1px solid #efcfe3;border-radius:50%;background:linear-gradient(135deg,#fff,#fff0f7);color:#a36eaa;font:1.5rem/1 'Mali',sans-serif;cursor:pointer;box-shadow:0 3px 10px #aa75a522;transition:transform .2s,background .2s,box-shadow .2s}
+.modal-close:hover{transform:rotate(90deg) scale(1.08);background:#fff3f8;box-shadow:0 5px 14px #aa75a544}
+@keyframes modal-appear{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes heading-sparkle{from{opacity:.5;transform:scale(.8)}to{opacity:1;transform:scale(1.15)}}
+@media(max-width:520px){.letter-modal{padding:48px 11px 11px;border-radius:22px}.letter-modal .paper.modal-paper{padding:28px 20px;max-height:calc(88svh - 88px)}}
+@media(prefers-reduced-motion:reduce){.letter-modal[open]{animation-duration:.28s!important;animation-iteration-count:1!important}}

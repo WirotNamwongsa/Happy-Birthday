@@ -4,7 +4,7 @@ const sender = 'น้องเก้า';
 const letterText = `สุขสันต์วันเกิดนะพี่น้ำ ขอให้ปีนี้เป็นปีที่สดใสและเต็มไปด้วยรอยยิ้ม
 ขอบคุณที่เป็นพี่สาวที่น่ารักและใจดีกับน้องเก้าเสมอมา
 ขอให้ทุกเรื่องที่ตั้งใจค่อยๆ สำเร็จ และมีคนดีๆอยู่ข้างๆเยอะๆ
-ถ้าวันไหนเหนื่อยก็อย่าลืมพัก อย่าลืมดูเเลตรักษาสุขภาพตัวเองด้วยนะ
+ถ้าวันไหนเหนื่อยก็อย่าลืมพัก อย่าลืมดูเเลรักษาสุขภาพตัวเองด้วย
 ขอให้ปีนี้เป็นปีที่ดีมากๆ มีความสุขในทุกๆวันเลยนะ`;
 
 const sky = document.querySelector('#sky');
@@ -178,6 +178,28 @@ document.querySelectorAll('.gift').forEach(gift => gift.addEventListener('click'
 const envelope = document.querySelector('#envelope');
 if (envelope) {
   let started = false;
+  let letterReady = false;
+  let modalTyped = null, modalSignature = null;
+  const paper = document.querySelector('#paper');
+  const letterModal = document.querySelector('#letterModal');
+  const modalPaperSlot = document.querySelector('#modalPaperSlot');
+  function showLetterModal() {
+    if (!letterModal || !modalPaperSlot || !paper) return;
+    const copy = paper.cloneNode(true);
+    copy.removeAttribute('id'); copy.classList.remove('open'); copy.classList.add('modal-paper');
+    modalTyped = copy.querySelector('#typed'); modalTyped?.removeAttribute('id'); modalTyped?.classList.add('typed-copy');
+    modalSignature = copy.querySelector('#signature'); modalSignature?.removeAttribute('id');
+    modalPaperSlot.replaceChildren(copy);
+    letterModal.showModal();
+    document.querySelector('#closeLetterModal')?.focus();
+  }
+  paper?.addEventListener('click', event => {
+    if (!envelope.classList.contains('open')) return;
+    event.stopPropagation();
+    if (letterReady) showLetterModal();
+  });
+  document.querySelector('#closeLetterModal')?.addEventListener('click', () => letterModal?.close());
+  letterModal?.addEventListener('click', event => { if (event.target === letterModal) letterModal.close(); });
   function heart() {
     const el = document.createElement('span'); el.className = 'float-heart'; el.textContent = ['💗', '💖', '💕'][Math.floor(Math.random() * 3)];
     el.style.left = `${10 + Math.random() * 80}%`; el.style.fontSize = `${18 + Math.random() * 20}px`; document.body.append(el); setTimeout(() => el.remove(), 4700);
@@ -185,11 +207,19 @@ if (envelope) {
   function openLetter() {
     if (envelope.classList.contains('open')) return;
     envelope.classList.add('open'); document.querySelector('#paper')?.classList.add('open');
-    const hint = document.querySelector('#letter-hint'); if (hint) hint.textContent = 'มีข้อความจากใจถึงพี่น้ำ 💕';
+    const hint = document.querySelector('#letter-hint'); if (hint) hint.textContent = 'กำลังเขียนจดหมายถึงพี่น้ำอยู่ 💕';
     if (started) return; started = true; let index = 0; const target = document.querySelector('#typed');
     function type() {
-      if (index < letterText.length) { target.textContent += letterText[index++]; document.querySelector('#paper').scrollTop = document.querySelector('#paper').scrollHeight; setTimeout(type, 32); }
-      else { document.querySelector('#signature').textContent = `From N'Kao`; document.querySelector('#signature')?.classList.add('show'); for (let n = 0; n < 7; n++) setTimeout(heart, n * 420); }
+      if (index < letterText.length) { target.textContent += letterText[index++]; if (modalTyped) modalTyped.textContent = target.textContent; paper.scrollTop = paper.scrollHeight; setTimeout(type, 32); }
+      else {
+        const signature = document.querySelector('#signature'); signature.textContent = `From N'Kao`; signature.classList.add('show');
+        if (modalSignature) { modalSignature.textContent = signature.textContent; modalSignature.classList.add('show'); }
+        for (let n = 0; n < 7; n++) setTimeout(heart, n * 420);
+        setTimeout(() => {
+          letterReady = true; paper.classList.add('ready-to-expand');
+          if (hint) hint.textContent = 'อ่านจดหมายครบแล้ว แตะที่กระดาษเพื่อขยายอ่าน 💌';
+        }, 720);
+      }
     }
     setTimeout(type, 500);
   }
