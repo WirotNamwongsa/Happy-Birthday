@@ -155,7 +155,13 @@ document.querySelectorAll('.gift').forEach(gift => gift.addEventListener('click'
   setTimeout(() => {
     gift.classList.remove('opening'); gift.classList.add('opened'); opened++;
     if (wish) {
-      wish.textContent = `${gift.dataset.wish}`;
+      const label = document.createElement('span');
+      label.className = 'wish-label';
+      label.textContent = `🎀 คำอวยพรกล่องที่ ${[...document.querySelectorAll('.gift')].indexOf(gift) + 1}`;
+      const message = document.createElement('p');
+      message.className = 'wish-message';
+      message.textContent = gift.dataset.wish;
+      wish.replaceChildren(label, message);
       requestAnimationFrame(() => wish.classList.add('show'));
     }
     const rect = gift.getBoundingClientRect();

@@ -53,8 +53,13 @@
     .gift.opened .bow{opacity:0;animation:none}
     .gift.shake{animation:shake .45s ease-in-out}
     @keyframes shake{25%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-5deg)}}
-.wish{max-width:660px;margin:-4px auto 0;padding:16px 20px;border:1px solid #f6d2e3;border-radius:20px;background:#ffffffc9;box-shadow:0 8px 24px #bb88b322;opacity:0;transform:translateY(10px) scale(.94);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1);font-size:1.05rem}
+.wish{position:relative;isolation:isolate;overflow:hidden;max-width:660px;margin:-4px auto 0;padding:20px 28px 22px;border:1px solid transparent;border-radius:23px;background:linear-gradient(145deg,#fffdfdf2,#fff8fcf2) padding-box,linear-gradient(120deg,#ffc0d8,#d0b1f3 48%,#a9e3ee 78%,#ffbfd9) border-box;box-shadow:0 12px 30px #bd86b82b,inset 0 1px #fff;opacity:0;transform:translateY(10px) scale(.94);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1);font-size:1.05rem}
+.wish:before,.wish:after{position:absolute;z-index:-1;pointer-events:none;font-family:'Itim',cursive;line-height:1}
+.wish:before{content:'✧';right:15px;top:7px;font-size:28px;color:#b899e8;opacity:.72}
+.wish:after{content:'♡';left:13px;bottom:3px;font-size:27px;color:#ee9fc4;opacity:.65}
     .wish.show{opacity:1;transform:translateY(0) scale(1)}
+.wish-label{display:inline-flex;align-items:center;gap:7px;margin:0 auto 9px;padding:4px 13px;border:1px solid #f3d6e7;border-radius:999px;background:linear-gradient(110deg,#fff0f6,#f5f0ff);color:#a577b0;font-size:.82rem;font-weight:600;letter-spacing:.03em}
+.wish-message{margin:0 auto;color:#725479;font-size:clamp(1rem,2.8vw,1.13rem);line-height:1.85;font-weight:500;text-wrap:pretty}
     .wish-spark{position:absolute;pointer-events:none;animation:burst 1s ease-out forwards;font-size:20px}
     @keyframes burst{to{transform:translate(var(--x),var(--y)) scale(.2) rotate(150deg);opacity:0}}
     .envelope-area{height:340px;position:relative;margin:8px auto 18px;width:min(90vw,420px);perspective:900px}
