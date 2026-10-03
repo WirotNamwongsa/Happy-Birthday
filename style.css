@@ -171,3 +171,10 @@ body.page-leaving:after{opacity:1}
   .wish{transition-duration:.65s!important}
   .wish-spark{animation-duration:1s!important;animation-iteration-count:1!important}
 }
+
+/* Keep the original envelope and paper layout; animate only the paper sliding out. */
+.envelope.open .paper{--paper-slide-distance:-90px;animation:paper-slide-out 1.35s cubic-bezier(.2,.8,.25,1) .12s both}
+@keyframes paper-slide-out{0%{transform:translateY(0)}18%{transform:translateY(10px)}100%{transform:translateY(var(--paper-slide-distance,-90px))}}
+@media(max-width:520px){.envelope.open .paper{--paper-slide-distance:-75px}}
+@media(max-height:720px){.envelope.open .paper{--paper-slide-distance:-65px}}
+@media(prefers-reduced-motion:reduce){.envelope.open .paper{animation-duration:1.35s!important;animation-iteration-count:1!important}}
