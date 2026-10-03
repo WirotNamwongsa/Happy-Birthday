@@ -7,11 +7,20 @@ const letterText = `สุขสันต์วันเกิดนะพี่
 ถ้าวันไหนเหนื่อยก็อย่าลืมพัก อย่าลืมดูเเลรักษาสุขภาพตัวเองด้วย
 ขอให้ปีนี้เป็นปีที่ดีมากๆ มีความสุขในทุกๆวันเลยนะ`;
 
+// ปรับจำนวนเอฟเฟกต์ได้จากจุดเดียว: เครื่องจอเล็กหรือมีคอร์ไม่เกิน 4 ใช้โหมด lite
+const IS_LITE_MODE = innerWidth < 700 || (navigator.hardwareConcurrency || 8) <= 4;
+// ค่า COUNT แยกโหมดเพื่อรักษาความสวยงามพร้อมลดภาระบนอุปกรณ์เบา
+const EFFECT_COUNTS = Object.freeze({
+  lite: { orbs: 4, balloons: 8, stars: 14, confetti: 90, clickHearts: 6, magicSparks: 2 },
+  normal: { orbs: 6, balloons: 14, stars: 24, confetti: 140, clickHearts: 8, magicSparks: 3 }
+});
+const COUNTS = IS_LITE_MODE ? EFFECT_COUNTS.lite : EFFECT_COUNTS.normal;
+
 const sky = document.querySelector('#sky');
 if (sky) {
   const colors = ['#ff9fbe', '#b7a0ef', '#8ed5e8', '#ffd48f', '#f6a8d5'];
   const orbColors = ['#ff9acb99', '#8edcf099', '#bd9df299', '#ffd88c99'];
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < COUNTS.orbs; i++) {
     const orb = document.createElement('i');
     orb.className = 'ambient-orb';
     orb.style.setProperty('--orb-x', `${Math.random() * 94}%`);
@@ -22,7 +31,7 @@ if (sky) {
     orb.style.setProperty('--orb-delay', `${-Math.random() * 12}s`);
     sky.append(orb);
   }
-  for (let i = 0; i < 22; i++) {
+  for (let i = 0; i < COUNTS.balloons; i++) {
     const balloon = document.createElement('i');
     balloon.className = 'balloon'; balloon.style.left = `${Math.random() * 100}%`;
     balloon.style.background = colors[i % colors.length]; balloon.style.borderColor = colors[i % colors.length];
@@ -31,7 +40,7 @@ if (sky) {
   }
   const starColors = ['#ffffff', '#ffe08a', '#f5b8dc', '#d0b8f6', '#a8dfec'];
   const starShapes = ['✦', '✧', '·', '♡'];
-  for (let i = 0; i < 42; i++) {
+  for (let i = 0; i < COUNTS.stars; i++) {
     const star = document.createElement('i');
     star.className = 'bg-star'; star.textContent = starShapes[i % starShapes.length];
     star.style.setProperty('--star-x', `${Math.random() * 100}%`);
@@ -46,47 +55,80 @@ if (sky) {
 
 const title = document.querySelector('#birthday-title');
 if (title) {
-  const titleText = `Happy Birthday Na P'Nam`;
-  // Keep Thai vowels and tone marks with their base character during the animation.
-  const graphemes = typeof Intl.Segmenter === 'function'
-    ? [...new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(titleText)].map(part => part.segment)
-    : [...titleText].reduce((items, char) => {
-      if (/\p{Mark}/u.test(char) && items.length) items[items.length - 1] += char;
-      else items.push(char);
-      return items;
-    }, []);
-  graphemes.forEach((char, i) => {
-    const span = document.createElement('span'); span.className = 'letter-pop';
-    span.style.animationDelay = `${i * 55}ms`; span.textContent = char === ' ' ? '\u00a0' : char; title.append(span);
+  // แก้ชื่อบนหัวเรื่องได้จากบรรทัดทั้งสองนี้ โดยยังคง aria-label เดิมใน HTML
+  const titleLines = [`Happy Birthday`, `Na P'Nam`];
+  let charIndex = 0;
+  titleLines.forEach(line => {
+    const lineWrap = document.createElement('span');
+    lineWrap.className = 'title-line';
+    const lineGraphemes = typeof Intl.Segmenter === 'function'
+      ? [...new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(line)].map(part => part.segment)
+      : [...line];
+    lineGraphemes.forEach(char => {
+      const span = document.createElement('span'); span.className = 'letter-pop';
+      span.style.animationDelay = `${charIndex++ * 55}ms`; span.textContent = char; lineWrap.append(span);
+    });
+    title.append(lineWrap);
   });
 }
 
 const canvas = document.querySelector('#confetti');
-const ctx = canvas?.getContext('2d'); let bits = [], confettiFrame = 0;
+// ใช้ canvas 2D ปกติพร้อม alpha เพื่อให้พื้นหลังโปร่งใสได้เสถียรบนทุกเบราว์เซอร์
+const ctx = canvas?.getContext('2d', { alpha: true });
+const confettiColors = ['#ff7aa9', '#ffd166', '#a88beb', '#80d9e8', '#ffacd1', '#fff'];
+const bits = confettiColors.map(() => []);
+let confettiFrame = 0;
 function resizeCanvas() {
-  if (!canvas) return;
-  const dpr = Math.min(devicePixelRatio || 1, 2);
+  if (!canvas || !ctx) return;
+  const dpr = Math.min(devicePixelRatio || 1, 1.5);
   canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 if (canvas) { resizeCanvas(); addEventListener('resize', resizeCanvas); }
 function celebrate() {
   if (!ctx) return;
-  const colors = ['#ff7aa9', '#ffd166', '#a88beb', '#80d9e8', '#ffacd1', '#fff'];
-  for (let i = 0; i < 180; i++) bits.push({ x: Math.random() * innerWidth, y: -20 - Math.random() * innerHeight * .4, vx: (Math.random() - .5) * 3, vy: 2 + Math.random() * 4, size: 4 + Math.random() * 7, color: colors[i % colors.length], rot: Math.random() * 6 });
-  function draw() {
-    ctx.clearRect(0, 0, innerWidth, innerHeight); bits = bits.filter(p => p.y < innerHeight + 30);
-    for (const p of bits) { p.x += p.vx; p.y += p.vy; p.vy += .035; p.rot += .05; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.color; ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * .65); ctx.restore(); }
-    if (bits.length) confettiFrame = requestAnimationFrame(draw); else { confettiFrame = 0; ctx.clearRect(0, 0, innerWidth, innerHeight); }
-  }
-  if (!confettiFrame) draw();
+  bits.forEach(group => { group.length = 0; });
+  for (let i = 0; i < COUNTS.confetti; i++) bits[i % bits.length].push({ x: Math.random() * innerWidth, y: -20 - Math.random() * innerHeight * .4, vx: (Math.random() - .5) * 3, vy: 2 + Math.random() * 4, size: 4 + Math.random() * 7, rot: Math.random() * 6 });
+  if (!confettiFrame && !document.hidden) confettiFrame = requestAnimationFrame(drawConfettiFrame);
 }
+function drawConfettiFrame() {
+  confettiFrame = 0;
+  if (!ctx || document.hidden) return;
+  const dpr = Math.min(devicePixelRatio || 1, 1.5);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
+  let active = false;
+  bits.forEach((group, colorIndex) => {
+    ctx.fillStyle = confettiColors[colorIndex];
+    let write = 0;
+    for (let i = 0; i < group.length; i++) {
+      const p = group[i]; p.x += p.vx; p.y += p.vy; p.vy += .035; p.rot += .05;
+      if (p.y >= innerHeight + 30) continue;
+      group[write++] = p;
+      const cos = Math.cos(p.rot), sin = Math.sin(p.rot);
+      ctx.setTransform(dpr * cos, dpr * sin, -dpr * sin, dpr * cos, dpr * p.x, dpr * p.y);
+      ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * .65);
+    }
+    group.length = write;
+    if (write) active = true;
+  });
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (active) confettiFrame = requestAnimationFrame(drawConfettiFrame);
+  else ctx.clearRect(0, 0, innerWidth, innerHeight);
+}
+
+// แช่เอฟเฟกต์พื้นหลังเมื่อซ่อนแท็บ และต่อ confetti เมื่อกลับมาใช้งาน
+document.addEventListener('visibilitychange', () => {
+  document.body.classList.toggle('background-paused', document.hidden);
+  if (document.hidden && confettiFrame) { cancelAnimationFrame(confettiFrame); confettiFrame = 0; }
+  if (!document.hidden && !confettiFrame && bits.some(group => group.length)) confettiFrame = requestAnimationFrame(drawConfettiFrame);
+});
 const blowButton = document.querySelector('#blowBtn');
 if (blowButton) {
   const holdDuration = 2400;
   let holdStarted = 0, holdFrame = 0, lastSparkAt = 0, magicLayer = null, isHolding = false;
   function addMagicSparks(progress) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < COUNTS.magicSparks; i++) {
       const spark = document.createElement('span');
       const symbols = ['✨', '💖', '⭐', '🫧'];
       const angle = -Math.PI / 2 + (Math.random() - .5) * 2.2;
@@ -120,8 +162,7 @@ if (blowButton) {
   function updateBurn(now) {
     if (!isHolding) return;
     const progress = Math.min((now - holdStarted) / holdDuration, 1);
-    const progressPercent = `${progress * 100}%`;
-    blowButton.style.setProperty('--magic-progress', progressPercent);
+    blowButton.style.setProperty('--magic-progress', progress);
     if (now - lastSparkAt > 125 && progress > .03) { addMagicSparks(progress); lastSparkAt = now; }
     if (progress >= 1) { finishHold(); return; }
     holdFrame = requestAnimationFrame(updateBurn);
@@ -148,7 +189,7 @@ if (blowButton) {
     if (!isHolding) return;
     isHolding = false; cancelAnimationFrame(holdFrame); blowButton.disabled = true;
     blowButton.classList.remove('holding'); blowButton.classList.add('blowing');
-    blowButton.style.setProperty('--magic-progress', '100%');
+    blowButton.style.setProperty('--magic-progress', 1);
     setTimeout(() => document.querySelector('#candle')?.classList.add('out'), 160);
     setTimeout(() => {
       const note = document.querySelector('.footer-note');
@@ -204,7 +245,6 @@ const envelope = document.querySelector('#envelope');
 if (envelope) {
   let started = false;
   let letterReady = false;
-  let modalTyped = null, modalSignature = null;
   const paper = document.querySelector('#paper');
   const letterModal = document.querySelector('#letterModal');
   const modalPaperSlot = document.querySelector('#modalPaperSlot');
@@ -212,10 +252,11 @@ if (envelope) {
     if (!letterModal || !modalPaperSlot || !paper) return;
     const copy = paper.cloneNode(true);
     copy.removeAttribute('id'); copy.classList.remove('open'); copy.classList.add('modal-paper');
-    modalTyped = copy.querySelector('#typed'); modalTyped?.removeAttribute('id'); modalTyped?.classList.add('typed-copy');
-    modalSignature = copy.querySelector('#signature'); modalSignature?.removeAttribute('id');
+    const copyTyped = copy.querySelector('#typed'); copyTyped?.removeAttribute('id'); copyTyped?.classList.add('typed-copy');
+    copy.querySelector('#signature')?.removeAttribute('id');
     modalPaperSlot.replaceChildren(copy);
     letterModal.showModal();
+    document.body.classList.add('modal-open');
     document.querySelector('#closeLetterModal')?.focus();
   }
   paper?.addEventListener('click', event => {
@@ -225,6 +266,7 @@ if (envelope) {
   });
   document.querySelector('#closeLetterModal')?.addEventListener('click', () => letterModal?.close());
   letterModal?.addEventListener('click', event => { if (event.target === letterModal) letterModal.close(); });
+  letterModal?.addEventListener('close', () => document.body.classList.remove('modal-open'));
   function heart() {
     const el = document.createElement('span'); el.className = 'float-heart'; el.textContent = ['💗', '💖', '💕'][Math.floor(Math.random() * 3)];
     el.style.left = `${10 + Math.random() * 80}%`; el.style.fontSize = `${18 + Math.random() * 20}px`; document.body.append(el); setTimeout(() => el.remove(), 4700);
@@ -233,12 +275,31 @@ if (envelope) {
     if (envelope.classList.contains('open')) return;
     envelope.classList.add('open'); document.querySelector('#paper')?.classList.add('open');
     const hint = document.querySelector('#letter-hint'); if (hint) hint.textContent = 'กำลังเขียนจดหมายถึงพี่น้ำอยู่ 💕';
-    if (started) return; started = true; let index = 0; const target = document.querySelector('#typed');
+    if (started) return; started = true; let index = 0, pendingText = '', typingFrame = 0;
+    const target = document.querySelector('#typed');
+    const textNode = document.createTextNode('');
+    target.replaceChildren(textNode);
+    let previousScrollHeight = paper.scrollHeight;
+    function flushTypedText() {
+      typingFrame = 0;
+      if (!pendingText) return;
+      textNode.appendData(pendingText);
+      pendingText = '';
+      const nextScrollHeight = paper.scrollHeight;
+      if (nextScrollHeight !== previousScrollHeight) {
+        paper.scrollTop = nextScrollHeight;
+        previousScrollHeight = nextScrollHeight;
+      }
+    }
     function type() {
-      if (index < letterText.length) { target.textContent += letterText[index++]; if (modalTyped) modalTyped.textContent = target.textContent; paper.scrollTop = paper.scrollHeight; setTimeout(type, 32); }
+      if (index < letterText.length) {
+        pendingText += letterText[index++];
+        if (!typingFrame) typingFrame = requestAnimationFrame(flushTypedText);
+        setTimeout(type, 32);
+      }
       else {
+        flushTypedText();
         const signature = document.querySelector('#signature'); signature.textContent = `From N'Kao`; signature.classList.add('show');
-        if (modalSignature) { modalSignature.textContent = signature.textContent; modalSignature.classList.add('show'); }
         for (let n = 0; n < 7; n++) setTimeout(heart, n * 420);
         setTimeout(() => {
           letterReady = true; paper.classList.add('ready-to-expand');
@@ -252,19 +313,37 @@ if (envelope) {
   envelope.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLetter(); } });
 }
 
+// ใช้ pool คงที่เพื่อลดการสร้างและลบ DOM ของประกายตามเมาส์
+const sparklePool = Array.from({ length: 14 }, () => {
+  const element = document.createElement('span');
+  element.className = 'sparkle'; element.setAttribute('aria-hidden', 'true'); element.style.display = 'none';
+  document.body.append(element);
+  return { element, busy: false, animation: null };
+});
 let lastSpark = 0;
 function sparkle(x, y) {
-  if (Date.now() - lastSpark < 60) return; lastSpark = Date.now();
-  const el = document.createElement('span'); el.className = 'sparkle'; el.textContent = Math.random() > .45 ? '✨' : '♡';
-  el.style.left = `${x}px`; el.style.top = `${y}px`; document.body.append(el); setTimeout(() => el.remove(), 800);
+  const now = performance.now();
+  if (now - lastSpark < 90) return;
+  const item = sparklePool.find(candidate => !candidate.busy);
+  if (!item) return;
+  lastSpark = now; item.busy = true;
+  const el = item.element;
+  el.textContent = Math.random() > .45 ? '✨' : '♡';
+  el.style.left = `${x}px`; el.style.top = `${y}px`; el.style.display = 'block';
+  item.animation?.cancel();
+  item.animation = el.animate([
+    { opacity: 1, transform: 'translateY(0) scale(1) rotate(0)' },
+    { opacity: 0, transform: 'translateY(-24px) scale(.2) rotate(80deg)' }
+  ], { duration: 750, easing: 'ease-out', fill: 'forwards' });
+  item.animation.onfinish = () => { el.style.display = 'none'; item.busy = false; item.animation = null; };
 }
-addEventListener('pointermove', e => { if (e.pointerType === 'mouse') sparkle(e.clientX, e.clientY); });
-addEventListener('pointerdown', e => sparkle(e.clientX, e.clientY));
+addEventListener('pointermove', e => { if (e.pointerType === 'mouse') sparkle(e.clientX, e.clientY); }, { passive: true });
 
 // Pop a small ring of floating hearts anywhere the page is clicked or tapped.
+const activeClickHearts = new Set();
 document.addEventListener('pointerdown', event => {
   const hearts = ['💗', '💖', '💕', '💓', '🩷'];
-  const count = 9;
+  const count = Math.min(COUNTS.clickHearts, 24 - activeClickHearts.size);
   for (let i = 0; i < count; i++) {
     const heart = document.createElement('span');
     const angle = (Math.PI * 2 * i / count) + (Math.random() - .5) * .35;
@@ -277,10 +356,12 @@ document.addEventListener('pointerdown', event => {
     heart.style.setProperty('--heart-y', `${Math.sin(angle) * distance}px`);
     heart.style.setProperty('--heart-rotate', `${Math.random() * 70 - 35}deg`);
     heart.style.setProperty('--heart-size', `${14 + Math.random() * 12}px`);
-    document.body.append(heart);
-    setTimeout(() => heart.remove(), 1000);
+    document.body.append(heart); activeClickHearts.add(heart);
+    const release = () => { activeClickHearts.delete(heart); heart.remove(); };
+    heart.addEventListener('animationend', release, { once: true });
+    setTimeout(release, 1100);
   }
-});
+}, { passive: true });
 
 // Animate internal page links, then follow their normal destinations.
 document.addEventListener('click', event => {
