@@ -20,10 +20,21 @@ if (sky) {
 }
 
 const title = document.querySelector('#birthday-title');
-if (title) [...`Happy Birthday ${recipient}!`].forEach((char, i) => {
-  const span = document.createElement('span'); span.className = 'letter-pop';
-  span.style.animationDelay = `${i * 55}ms`; span.textContent = char === ' ' ? '\u00a0' : char; title.append(span);
-});
+if (title) {
+  const titleText = `Happy Birthday ${recipient}!`;
+  // Keep Thai vowels and tone marks with their base character during the animation.
+  const graphemes = typeof Intl.Segmenter === 'function'
+    ? [...new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(titleText)].map(part => part.segment)
+    : [...titleText].reduce((items, char) => {
+      if (/\p{Mark}/u.test(char) && items.length) items[items.length - 1] += char;
+      else items.push(char);
+      return items;
+    }, []);
+  graphemes.forEach((char, i) => {
+    const span = document.createElement('span'); span.className = 'letter-pop';
+    span.style.animationDelay = `${i * 55}ms`; span.textContent = char === ' ' ? '\u00a0' : char; title.append(span);
+  });
+}
 
 const canvas = document.querySelector('#confetti');
 const ctx = canvas?.getContext('2d'); let bits = [], confettiFrame = 0;
