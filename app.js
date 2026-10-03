@@ -149,11 +149,15 @@ if (blowButton) {
 
 let opened = 0; const wish = document.querySelector('#wish');
 document.querySelectorAll('.gift').forEach(gift => gift.addEventListener('click', () => {
-  if (gift.classList.contains('opened')) return;
-  gift.classList.add('shake');
+  if (gift.classList.contains('opened') || gift.classList.contains('opening')) return;
+  gift.classList.add('opening');
+  wish?.classList.remove('show');
   setTimeout(() => {
-    gift.classList.remove('shake'); gift.classList.add('opened'); opened++;
-    if (wish) { wish.textContent = `🎁 ${gift.dataset.wish}`; wish.classList.add('show'); }
+    gift.classList.remove('opening'); gift.classList.add('opened'); opened++;
+    if (wish) {
+      wish.textContent = `🎁 ${gift.dataset.wish}`;
+      requestAnimationFrame(() => wish.classList.add('show'));
+    }
     const rect = gift.getBoundingClientRect();
     for (let i = 0; i < 10; i++) {
       const spark = document.createElement('span'); spark.className = 'wish-spark'; spark.textContent = ['✨', '💖', '⭐'][i % 3];
@@ -162,7 +166,7 @@ document.querySelectorAll('.gift').forEach(gift => gift.addEventListener('click'
       document.body.append(spark); setTimeout(() => spark.remove(), 1000);
     }
     if (opened === 3) { document.querySelector('#all-open')?.classList.remove('hidden'); document.querySelector('#toLetter')?.classList.remove('hidden'); }
-  }, 250);
+  }, 700);
 }));
 
 const envelope = document.querySelector('#envelope');

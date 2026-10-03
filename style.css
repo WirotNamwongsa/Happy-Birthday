@@ -53,7 +53,7 @@
     .gift.opened .bow{opacity:0;animation:none}
     .gift.shake{animation:shake .45s ease-in-out}
     @keyframes shake{25%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-5deg)}}
-    .wish{max-width:660px;margin:-4px auto 0;padding:16px 20px;border:1px solid #f6d2e3;border-radius:20px;background:#ffffffc9;box-shadow:0 8px 24px #bb88b322;opacity:0;transform:translateY(10px) scale(.94);transition:.55s cubic-bezier(.2,.8,.2,1);font-size:1.05rem}
+.wish{max-width:660px;margin:-4px auto 0;padding:16px 20px;border:1px solid #f6d2e3;border-radius:20px;background:#ffffffc9;box-shadow:0 8px 24px #bb88b322;opacity:0;transform:translateY(10px) scale(.94);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1);font-size:1.05rem}
     .wish.show{opacity:1;transform:translateY(0) scale(1)}
     .wish-spark{position:absolute;pointer-events:none;animation:burst 1s ease-out forwards;font-size:20px}
     @keyframes burst{to{transform:translate(var(--x),var(--y)) scale(.2) rotate(150deg);opacity:0}}
@@ -147,3 +147,22 @@ body.page-leaving:after{opacity:1}
 .gift:not(.opened).shake{animation:shake .45s ease-in-out}
 @keyframes gift-hover{0%,100%{transform:translateY(-3px) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1.5deg)}}
 @media(prefers-reduced-motion:reduce){.gift:not(.opened):hover{animation-duration:1.15s!important;animation-iteration-count:infinite!important}}
+/* เปิดกล่องและเผยคำอวยพรเป็นจังหวะต่อเนื่อง */
+.gift:not(.opened).opening{animation:gift-open-lift .46s cubic-bezier(.2,.8,.25,1) both;z-index:4;filter:drop-shadow(0 14px 13px #bd81bf66)}
+.gift:not(.opened).opening .gift-lid{animation:gift-lid-open .62s cubic-bezier(.18,.85,.28,1) .04s both}
+.gift:not(.opened).opening .bow{animation:gift-bow-pop .48s cubic-bezier(.2,.8,.25,1) both}
+.gift.opened{transform:translateY(-3px) scale(1.035)}
+.gift.opened .gift-lid{transition:transform .25s ease-out}
+.gift.opened .gift-box{animation:gift-box-settle .38s ease-out}
+.wish.show{transition-delay:.04s}
+@keyframes gift-open-lift{0%{transform:translateY(0) scale(1)}36%{transform:translateY(-12px) scale(1.09)}68%{transform:translateY(-8px) scale(1.06)}100%{transform:translateY(-3px) scale(1.035)}}
+@keyframes gift-lid-open{0%{transform:translate(0,0) rotate(0)}42%{transform:translate(-5px,-28px) rotate(-12deg)}100%{transform:translate(-14px,-48px) rotate(-24deg)}}
+@keyframes gift-bow-pop{0%{opacity:1;transform:translate(-50%,0) scale(1)}55%{opacity:1;transform:translate(-50%,-20px) scale(1.2) rotate(-12deg)}100%{opacity:0;transform:translate(-50%,-35px) scale(.8) rotate(18deg)}}
+@keyframes gift-box-settle{0%{filter:brightness(1.15)}100%{filter:brightness(1)}}
+@media(prefers-reduced-motion:reduce){
+  .gift:not(.opened).opening{animation-duration:.46s!important;animation-iteration-count:1!important}
+  .gift:not(.opened).opening .gift-lid{animation-duration:.62s!important;animation-delay:.04s!important;animation-iteration-count:1!important}
+  .gift:not(.opened).opening .bow{animation-duration:.48s!important;animation-iteration-count:1!important}
+  .wish{transition-duration:.65s!important}
+  .wish-spark{animation-duration:1s!important;animation-iteration-count:1!important}
+}
