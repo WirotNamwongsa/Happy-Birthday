@@ -112,3 +112,31 @@ body.page-leaving:after{opacity:1}
   body:after{transition:opacity .44s ease!important}
   .click-heart{animation-duration:.95s!important;animation-iteration-count:1!important}
 }
+
+/* ปุ่มเป่าเทียนมีจังหวะชวนกด แล้วส่งต่อเอฟเฟกต์หลังเป่า */
+#blowBtn{position:relative;isolation:isolate;animation:blow-glow 2.2s ease-in-out infinite}
+#blowBtn:after{content:"";position:absolute;z-index:-1;inset:-6px;border:2px solid #f4a3c7;border-radius:inherit;opacity:0;animation:blow-ring 2.2s ease-out infinite;pointer-events:none}
+#blowBtn:hover{transform:translateY(-4px) scale(1.05);animation-play-state:paused}
+#blowBtn:active{transform:scale(.96)}
+#blowBtn.holding{animation:none;filter:saturate(1.15);box-shadow:0 0 24px #c990f0aa,0 0 38px #f39bc766}
+#blowBtn.blowing{animation:magic-release 1.2s cubic-bezier(.2,.75,.25,1) forwards;pointer-events:none}
+#blowBtn.hold-reset{animation:hold-reset .22s ease-out}
+#blowBtn.blowing:after{animation:none;opacity:0}
+#blowBtn:disabled{cursor:default}
+#toGifts.next-arrive{animation:next-reveal .55s cubic-bezier(.2,.8,.25,1) both}
+.candle.out .flame{display:block;animation:flame-extinguish .42s ease-out forwards}
+.magic-layer{position:absolute;z-index:4;inset:-18px -12px;overflow:visible;border-radius:inherit;pointer-events:none}
+.magic-layer:before{content:"";position:absolute;inset:-7px;border:2px solid #fff7ff;border-radius:inherit;box-shadow:0 0 15px #eab4f5;opacity:.5;animation:magic-halo .85s ease-in-out infinite alternate}
+.magic-layer:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(120deg,#ffe2f4ed,#f0c2f5ed 48%,#c4b4ffed 75%,#a7e8f3ed);clip-path:inset(calc(100% - var(--magic-progress,0%)) 0 0);transition:filter .2s;filter:drop-shadow(0 0 10px #e9a2f4)}
+.magic-orb{position:absolute;z-index:1;width:9px;height:9px;left:var(--orb-x);top:var(--orb-y);border-radius:50%;background:#fff9ff;box-shadow:0 0 10px 3px #f5d8ff;animation:orb-drift 1.2s ease-in-out infinite alternate}
+.magic-spark{position:absolute;z-index:3;left:var(--spark-x);bottom:var(--spark-y);font-size:var(--spark-size);line-height:1;filter:drop-shadow(0 0 5px #fff);animation:spark-rise var(--spark-time) cubic-bezier(.2,.65,.3,1) forwards}
+@keyframes blow-glow{0%,100%{box-shadow:0 7px 18px #bc79b344}50%{box-shadow:0 8px 26px #ed89b977}}
+@keyframes blow-ring{0%{transform:scale(.9);opacity:.65}75%,100%{transform:scale(1.16);opacity:0}}
+@keyframes hold-reset{50%{transform:scale(.96)}100%{transform:scale(1)}}
+@keyframes magic-release{0%{transform:scale(1);filter:none}24%{transform:scale(1.04);filter:brightness(1.35)}62%{transform:translateY(-14px) scale(1.12);opacity:.9;filter:brightness(1.5) drop-shadow(0 0 18px #e8a2f5)}100%{transform:translateY(-32px) scale(.72);opacity:0;filter:blur(8px)}}
+@keyframes magic-halo{to{opacity:1;transform:scale(1.1)}}
+@keyframes orb-drift{to{transform:translateY(-10px) scale(.7);opacity:.55}}
+@keyframes spark-rise{0%{opacity:0;transform:translate(0,8px) scale(.3) rotate(0)}18%{opacity:1}100%{opacity:0;transform:translate(var(--spark-dx),var(--spark-dy)) scale(.4) rotate(var(--spark-rotate))}}
+@keyframes flame-extinguish{0%{opacity:1;transform:scale(1) rotate(0)}35%{opacity:1;transform:scale(1.2,.65) rotate(-10deg)}100%{opacity:0;transform:translateY(-9px) scale(.1) rotate(18deg)}}
+@keyframes next-reveal{from{opacity:0;transform:translateY(16px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){#blowBtn{animation-duration:2.2s!important;animation-iteration-count:1!important}#blowBtn:after{animation-duration:2.2s!important;animation-iteration-count:1!important}#blowBtn.blowing{animation-duration:1.2s!important;animation-iteration-count:1!important}.magic-orb{animation-duration:1s!important;animation-iteration-count:infinite!important}.magic-spark{animation-duration:.85s!important;animation-iteration-count:1!important}.magic-layer:before{animation-duration:.85s!important;animation-iteration-count:infinite!important}.candle.out .flame{animation-duration:.42s!important;animation-iteration-count:1!important}#toGifts.next-arrive{animation-duration:.55s!important;animation-iteration-count:1!important}}

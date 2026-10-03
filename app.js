@@ -57,11 +57,95 @@ function celebrate() {
   if (!confettiFrame) draw();
 }
 const blowButton = document.querySelector('#blowBtn');
-if (blowButton) blowButton.addEventListener('click', () => {
-  document.querySelector('#candle')?.classList.add('out'); blowButton.classList.add('hidden');
-  document.querySelector('#toGifts')?.classList.remove('hidden');
-  const note = document.querySelector('.footer-note'); if (note) note.textContent = 'คำอธิษฐานส่งไปถึงแล้ว ✨'; celebrate();
-});
+if (blowButton) {
+  const holdDuration = 2400;
+  let holdStarted = 0, holdFrame = 0, lastSparkAt = 0, magicLayer = null, isHolding = false;
+  function addMagicSparks(progress) {
+    for (let i = 0; i < 3; i++) {
+      const spark = document.createElement('span');
+      const symbols = ['✨', '💖', '⭐', '🫧'];
+      const angle = -Math.PI / 2 + (Math.random() - .5) * 2.2;
+      const distance = 28 + Math.random() * 54;
+      spark.className = 'magic-spark';
+      spark.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      spark.style.setProperty('--spark-x', `${8 + Math.random() * 84}%`);
+      spark.style.setProperty('--spark-y', `${10 + progress * 28}%`);
+      spark.style.setProperty('--spark-size', `${12 + Math.random() * 12}px`);
+      spark.style.setProperty('--spark-dx', `${Math.cos(angle) * distance}px`);
+      spark.style.setProperty('--spark-dy', `${Math.sin(angle) * distance}px`);
+      spark.style.setProperty('--spark-time', `${.65 + Math.random() * .45}s`);
+      spark.style.setProperty('--spark-rotate', `${Math.random() * 100 - 50}deg`);
+      magicLayer.append(spark);
+      setTimeout(() => spark.remove(), 1200);
+    }
+  }
+  function makeMagicLayer() {
+    magicLayer = document.createElement('span');
+    magicLayer.className = 'magic-layer';
+    magicLayer.setAttribute('aria-hidden', 'true');
+    for (let i = 0; i < 7; i++) {
+      const orb = document.createElement('i');
+      orb.className = 'magic-orb';
+      orb.style.setProperty('--orb-x', `${5 + Math.random() * 90}%`);
+      orb.style.setProperty('--orb-y', `${Math.random() * 100}%`);
+      magicLayer.append(orb);
+    }
+    blowButton.append(magicLayer);
+  }
+  function updateBurn(now) {
+    if (!isHolding) return;
+    const progress = Math.min((now - holdStarted) / holdDuration, 1);
+    const progressPercent = `${progress * 100}%`;
+    blowButton.style.setProperty('--magic-progress', progressPercent);
+    if (now - lastSparkAt > 125 && progress > .03) { addMagicSparks(progress); lastSparkAt = now; }
+    if (progress >= 1) { finishHold(); return; }
+    holdFrame = requestAnimationFrame(updateBurn);
+  }
+  function startHold(event) {
+    if (blowButton.disabled || isHolding) return;
+    if (event.type === 'pointerdown' && event.button !== 0) return;
+    event.preventDefault(); isHolding = true; holdStarted = performance.now(); lastSparkAt = 0;
+    makeMagicLayer(); blowButton.classList.remove('hold-reset'); blowButton.classList.add('holding');
+    if (event.pointerId !== undefined) {
+      try { blowButton.setPointerCapture(event.pointerId); } catch {}
+    }
+    holdFrame = requestAnimationFrame(updateBurn);
+  }
+  function stopHold() {
+    if (!isHolding) return;
+    isHolding = false; cancelAnimationFrame(holdFrame);
+    blowButton.classList.remove('holding'); blowButton.classList.add('hold-reset');
+    blowButton.style.removeProperty('--magic-progress');
+    magicLayer?.remove(); magicLayer = null;
+    setTimeout(() => blowButton.classList.remove('hold-reset'), 220);
+  }
+  function finishHold() {
+    if (!isHolding) return;
+    isHolding = false; cancelAnimationFrame(holdFrame); blowButton.disabled = true;
+    blowButton.classList.remove('holding'); blowButton.classList.add('blowing');
+    blowButton.style.setProperty('--magic-progress', '100%');
+    setTimeout(() => document.querySelector('#candle')?.classList.add('out'), 160);
+    setTimeout(() => {
+      const note = document.querySelector('.footer-note');
+      if (note) note.textContent = 'คำอธิษฐานส่งไปถึงแล้ว ✨';
+      celebrate();
+    }, 480);
+    setTimeout(() => {
+      blowButton.classList.add('hidden');
+      const next = document.querySelector('#toGifts');
+      next?.classList.remove('hidden'); next?.classList.add('next-arrive');
+    }, 1250);
+  }
+  blowButton.addEventListener('pointerdown', startHold);
+  blowButton.addEventListener('pointerup', stopHold);
+  blowButton.addEventListener('pointercancel', stopHold);
+  blowButton.addEventListener('lostpointercapture', stopHold);
+  blowButton.addEventListener('keydown', event => {
+    if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); if (!event.repeat) startHold(event); }
+  });
+  blowButton.addEventListener('keyup', event => { if (event.key === ' ' || event.key === 'Enter') stopHold(); });
+  addEventListener('blur', stopHold);
+}
 
 let opened = 0; const wish = document.querySelector('#wish');
 document.querySelectorAll('.gift').forEach(gift => gift.addEventListener('click', () => {
