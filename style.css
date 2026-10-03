@@ -80,3 +80,17 @@
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   
 /* หน้าทีละฉาก */ body{min-height:100svh;overflow:hidden}.scene{min-height:100svh;height:100svh;overflow:hidden;padding:48px 18px 24px}.page-nav{display:flex;justify-content:center;gap:12px;margin-top:14px}.page-nav a{text-decoration:none}.progress a{text-decoration:none;display:block}@media(max-height:720px){.scene{padding-top:42px;padding-bottom:8px}.cake-wrap{height:220px;transform:scale(.78);margin:-5px auto 0}.gift-row{margin:18px auto}.envelope-area{height:280px;transform:scale(.88);margin:-5px auto}.paper.open,.envelope.open .paper{height:245px;transform:translateY(-65px)}}
+
+/* เค้กชั้นเดียวทรงนุ่ม ให้ครีมรับกับขอบเค้กและคงพาเลตต์เดิม */
+.cake-wrap{filter:drop-shadow(0 13px 12px #cc8bb344)}
+.cake-plate{left:5%;width:90%;height:22px;bottom:18px;background:linear-gradient(180deg,#dfc9f1,#b998dc);box-shadow:inset 0 5px #eee2f8,0 4px 0 #a987cb}
+.cake-bottom{left:13%;width:74%;height:84px;bottom:36px;border:0;border-radius:16px 16px 24px 24px;background:linear-gradient(90deg,#f59cbd 0%,#ffc6d9 48%,#f49abc 100%);box-shadow:inset -9px 0 #dc79a32b,inset 0 -10px #e77da5}
+.cake-bottom:before{content:'♥　✿　♥　✿　♥';position:absolute;inset:39px 0 auto;text-align:center;color:#fff9fc;font-size:16px;letter-spacing:1px;text-shadow:0 1px 2px #d879a933}
+.cake-bottom:after{content:'';position:absolute;left:8%;right:8%;top:9px;height:7px;border-radius:50%;background:#ffdce8a8}
+.cake-top{z-index:1;left:10%;width:80%;height:47px;bottom:103px;border:4px solid #ffd9e6;background:linear-gradient(180deg,#fffafd,#fff0f5);box-shadow:inset 0 4px #fff}
+.icing{z-index:2;left:14%;width:72%;height:28px;bottom:91px;border-radius:0 0 21px 21px;background:linear-gradient(90deg,#fff4f8,#fffafd 50%,#fff0f5);box-shadow:inset 0 -3px #f8d5e2}
+.icing:before,.icing:after{top:auto;bottom:-10px;width:14px;height:17px;background:#fff5f8;border-radius:0 0 10px 10px;box-shadow:inset 0 -2px #f8d5e2}
+.icing:before{left:24%}.icing:after{right:23%;height:21px;bottom:-11px}
+.candle{z-index:3;bottom:143px;height:57px;width:14px;left:calc(50% - 7px);border-radius:5px 5px 2px 2px;background:repeating-linear-gradient(135deg,#91d9ed 0 8px,#fff 8px 15px);box-shadow:inset -3px 0 #70c6dd}
+.flame{left:1px;top:-27px;width:12px;height:22px}
+@media(max-width:520px){.cake-bottom{height:80px}.cake-top{bottom:100px}.icing{bottom:88px}.candle{bottom:140px}}
